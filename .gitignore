@@ -1,0 +1,12 @@
+# Directories
+
+xcode
+visualstudio
+
+**cmake-build-debug
+**cmake-build-release
+
+**bin/
+**bin-int/
+
+.DS_Store
