@@ -1,5 +1,9 @@
+#include <SDL.h>
+
 class Player {
 public:
-    bool tp = false;
     float x,y;
+    SDL_Renderer *renderer;
+
+    void draw();
 };

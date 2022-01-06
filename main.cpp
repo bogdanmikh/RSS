@@ -12,7 +12,7 @@
 int main(int argc, char *argv[]) {
     Logger logger;
     logger.logAbout();
-    bool tp = false;
+    bool r = false;
 
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
         print("error initializing SDL: ");
@@ -53,53 +53,60 @@ int main(int argc, char *argv[]) {
     car.y = 100;
 
     Player jack;
+    jack.renderer = renderer;
     jack.x = 200;
     jack.y = 200;
 
     Input input;
     input.quit = false;
     memset(input.keys, false, 1024);
+
     while (input.shouldClose() == false) {
         input.pollEvents();
-
-        if (input.isKeyDown(SDLK_d)) {
-            car.horizontal = true;
-            car.x += 0.050f;
+        if ((input.isKeyJustDown(SDLK_r))) {
+            r = r == false;
         }
-        if (input.isKeyDown(SDLK_a)) {
-            car.horizontal = true;
-            car.x -= 0.050f;
+        if (r) {
+            if (input.isKeyDown(SDLK_d)) {
+                car.horizontal = true;
+                car.x += 0.050f;
+            }
+            if (input.isKeyDown(SDLK_a)) {
+                car.horizontal = true;
+                car.x -= 0.050f;
+            }
+            if (input.isKeyDown(SDLK_w)) {
+                car.horizontal = false;
+                car.y -= 0.050f;
+            }
+            if (input.isKeyDown(SDLK_s)) {
+                car.horizontal = false;
+                car.y += 0.050f;
+            }
+            SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+            SDL_RenderClear(renderer);
+            car.draw();
+            SDL_RenderPresent(renderer);
+        } else {
+            if (input.isKeyDown(SDLK_d)) {
+                jack.x += 0.01f;
+            }
+            if (input.isKeyDown(SDLK_a)) {
+                jack.x -= 0.01f;
+            }
+            if (input.isKeyDown(SDLK_w)) {
+                car.horizontal = false;
+                jack.y -= 0.01f;
+            }
+            if (input.isKeyDown(SDLK_s)) {
+                jack.y += 0.01f;
+            }
+            SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+            SDL_RenderClear(renderer);
+            jack.draw();
+            SDL_RenderPresent(renderer);
         }
-        if (input.isKeyDown(SDLK_w)) {
-            car.horizontal = false;
-            car.y -= 0.050f;
-        }
-        if (input.isKeyDown(SDLK_s)) {
-            car.horizontal = false;
-            car.y += 0.050f;
-        }
-
-        if (input.isKeyDown(SDLK_d)) {
-            jack.x += 0.01f;
-        }
-        if (input.isKeyDown(SDLK_a)) {
-            jack.x -= 0.01f;
-        }
-        if (input.isKeyDown(SDLK_w)) {
-            car.horizontal = false;
-            jack.y -= 0.01f;
-        }
-        if (input.isKeyDown(SDLK_s)) {
-            jack.y += 0.01f;
-        }
-
-        SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-        SDL_RenderClear(renderer);
-
-        car.draw();
-        SDL_RenderPresent(renderer);
     }
-
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
 
